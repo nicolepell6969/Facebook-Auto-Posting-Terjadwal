@@ -38,9 +38,22 @@ SCHEDULE     = ["05:40", "15:00", "21:00"] # Jadwal eksekusi posting (Format 24 
 GEMINI_API_KEY = "API-KEY-GEMINI"
 
 
-## ⚙️ Persyaratan Sistem
+📝 Penjelasan Detail Fungsi Variabel:
 
-1. Python 3.8 atau lebih baru.
-2. Google Chrome terinstal di sistem / VPS.
-   - *Untuk Ubuntu/Debian:* `sudo apt update && sudo apt install google-chrome-stable`
-3. Akun Facebook aktif dengan *cookies* yang sudah diekspor.
+    COOKIE_FILE ("cookies.json")
+    Berfungsi sebagai kunci masuk (autentikasi) ke akun Facebook Anda. Menggunakan cookies jauh lebih aman daripada menggunakan kombinasi email dan password, serta meminimalisir risiko akun terkena checkpoint atau pemblokiran oleh Facebook. Pastikan file ini berada di folder yang sama dengan script.
+
+    HISTORY_FILE ("history.json")
+    Sistem cerdas bot untuk merekam jejak aktivitas. Setiap kali bot berhasil memposting teks atau media, datanya akan dicatat di file ini. Ini memastikan bot tidak akan pernah memposting teks atau media yang sama dua kali. (Tips: Hapus file ini jika Anda ingin mengulang siklus postingan dari awal).
+
+    TEXTS_FILE ("texts.txt")
+    File sumber yang berisi kumpulan status/caption manual buatan Anda. Bot akan mengambil teks secara acak dari file ini jika Anda memutuskan untuk tidak memakai AI, atau jika kuota/server API Gemini sedang mengalami gangguan (fallback mechanism). Pisahkan setiap status di file ini menggunakan baris kosong (Enter 2x).
+
+    MEDIA_DIR ("media")
+    Direktori tempat Anda menyimpan seluruh stok konten visual (foto/video). Bot akan memilih satu file secara acak dari folder ini untuk diunggah bersamaan dengan caption. Jika Anda hanya ingin bot memposting teks/status biasa, biarkan folder ini kosong.
+
+    SCHEDULE
+    Daftar waktu atau jadwal kapan bot harus mulai bekerja. Gunakan format waktu 24 jam (contoh: 05:40, 15:00). Anda bebas menambahkan, mengurangi, atau mengubah jam tayang sesuai dengan jam ramai (prime time) audiens Anda. Pastikan jadwal ini disesuaikan dengan zona waktu VPS/Server Anda.
+
+    GEMINI_API_KEY
+    Fitur Autopilot AI. Jika Anda memasukkan kunci rahasia dari Google AI Studio di sini, bot akan secara otomatis memproduksi caption unik yang disesuaikan dengan waktu (pagi/siang/sore/malam). Jika variabel ini dibiarkan kosong (""), modul AI akan dinonaktifkan dan bot beralih ke mode manual (menggunakan TEXTS_FILE).
