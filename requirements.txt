@@ -1,0 +1,4 @@
+selenium>=4.10.0
+undetected-chromedriver>=3.5.0
+fake-useragent>=1.4.0
+google-generativeai>=0.4.0
