@@ -18,6 +18,22 @@ Dilengkapi dengan integrasi **Google Gemini AI** untuk menghasilkan *caption* ya
 
 ---
 
+# ===================== KONFIGURASI UMUM =====================
+
+COOKIE_FILE = "cookies.json" # cookies ambil untuk login auth
+HISTORY_FILE = "history.json" # history posting agar tidak double post teks dan media yang sama
+TEXTS_FILE = "texts.txt" # opsi isi teks untuk caption jika tidak pakai api AI
+MEDIA_DIR = "media" # list foto / video untuk di unggah jika hanya teks saja kosongkan
+
+SCHEDULE = ["05:40", "15:00", "21:00"] # jadwal waktu untuk posting bisa di tambah
+
+# ===================== KONFIGURASI AI =======================
+
+# Masukkan API Key Gemini Anda di bawah ini
+GEMINI_API_KEY = "API-KEY-GEMINI" 
+
+
+
 ## ⚙️ Persyaratan Sistem
 
 1. Python 3.8 atau lebih baru.
