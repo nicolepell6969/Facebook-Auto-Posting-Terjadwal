@@ -1,0 +1,18 @@
+# Environments
+venv/
+env/
+.env
+
+# Cache
+__pycache__/
+*.py[cod]
+
+# Sensitive Data / Local configs
+cookies.json
+config.json
+history.json
+app.log
+debug_error.png
+
+# Media (opsional, jika ingin dikosongkan)
+# media/*

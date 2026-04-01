@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FB Auto-Poster Feat AI - Dashboard</title>
+    <!-- Google Fonts inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dark-theme">
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-robot"></i>
+                <h2>AutoPoster Pro</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="#dashboard" class="nav-item active" data-target="dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#schedule" class="nav-item" data-target="schedule"><i class="fa-solid fa-clock"></i> Schedule & AI</a>
+                <a href="#texts" class="nav-item" data-target="texts"><i class="fa-solid fa-file-lines"></i> Teks Manual</a>
+                <a href="#media" class="nav-item" data-target="media"><i class="fa-solid fa-photo-film"></i> Media Manager</a>
+                <a href="#cookies" class="nav-item" data-target="cookies"><i class="fa-solid fa-cookie-bite"></i> Session Cookies</a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>Status: <span class="status-indicator online">Online</span></p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="topbar">
+                <div class="header-title">
+                    <h1 id="current-page-title">Dashboard Utama</h1>
+                </div>
+                <div class="header-actions">
+                    <button id="btn-toggle-automation" class="btn-primary" style="background: var(--success);">
+                        <i class="fa-solid fa-play"></i> Start Automation
+                    </button>
+                    <button id="btn-force-post" class="btn-secondary btn-sm" title="Paksa Posting Sekarang">
+                        <i class="fa-solid fa-bolt"></i>
+                    </button>
+                    <div class="profile-pic">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=1e293b&color=38bdf8" alt="Admin">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Pages Container -->
+            <div class="pages-container">
+                <!-- Page: Dashboard -->
+                <section id="page-dashboard" class="page active">
+                    <div class="cards-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fa-solid fa-clock"></i></div>
+                            <div class="stat-info">
+                                <h3>Total Jadwal Aktif</h3>
+                                <p id="stat-schedule-count">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fa-solid fa-photo-film"></i></div>
+                            <div class="stat-info">
+                                <h3>Media Tersimpan</h3>
+                                <p id="stat-media-count">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2><i class="fa-solid fa-terminal"></i> Terminal Log Server</h2>
+                            <button id="btn-refresh-log" class="btn-secondary btn-sm"><i class="fa-solid fa-rotate-right"></i></button>
+                        </div>
+                        <div class="terminal-box" id="terminal-log">
+                            <!-- Logs will be appended here -->
+                            <p class="log-text info">[*] Sistem Siap dan Berjalan...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Page: Schedule & AI -->
+                <section id="page-schedule" class="page">
+                    <div class="panel glass-panel">
+                        <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Pengaturan API Gemini AI</h2>
+                        <form id="form-config" class="classic-form">
+                            <div class="form-group">
+                                <label for="gemini-api">Gemini API Key</label>
+                                <input type="password" id="gemini-api" placeholder="Masukkan API Key untuk auto-generate caption">
+                            </div>
+                            
+                            <hr class="separator">
+                            
+                            <h2><i class="fa-solid fa-stopwatch"></i> Jadwal Posting Otomatis</h2>
+                            <p class="text-muted">Tambahkan waktu (Format HH:MM) untuk jadwal autopilot jalannya bot.</p>
+                            
+                            <div class="schedule-list" id="schedule-list">
+                                <!-- Jadwal akan diload ke sini -->
+                            </div>
+                            <div class="add-schedule-box">
+                                <input type="time" id="new-schedule-time">
+                                <button type="button" id="btn-add-schedule" class="btn-secondary"><i class="fa-solid fa-plus"></i> Tambah Jadwal</button>
+                            </div>
+
+                            <button type="submit" class="btn-primary mt-4"><i class="fa-solid fa-save"></i> Simpan Pengaturan</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Page: Texts -->
+                <section id="page-texts" class="page">
+                    <div class="panel">
+                        <h2><i class="fa-solid fa-pen-to-square"></i> Teks Manual (Fallback)</h2>
+                        <p class="text-muted mb-4">Teks di bawah akan dipilih secara acak jika Gemini API kosong, limit, atau gagal merespon. Pisahkan masing-masing caption dengan Enter dua kali (baris kosong).</p>
+                        <form id="form-texts">
+                            <textarea id="texts-content" rows="15" placeholder="Masukkan status fallback Anda di sini..."></textarea>
+                            <button type="submit" class="btn-primary mt-4"><i class="fa-solid fa-save"></i> Simpan File Teks</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Page: Media -->
+                <section id="page-media" class="page">
+                    <div class="panel">
+                        <div class="panel-header-flex">
+                            <h2><i class="fa-regular fa-images"></i> Galeri Media</h2>
+                            <button id="btn-upload-click" class="btn-primary"><i class="fa-solid fa-cloud-arrow-up"></i> Upload File Baru</button>
+                            <input type="file" id="file-upload-input" style="display: none;" accept="image/*,video/*">
+                        </div>
+                        <p class="text-muted mb-4">Tambahkan foto dan video. Bot akan memilih acak secara otomatis untuk dipasangkan dengan teks/AI Caption.</p>
+
+                        <div class="upload-progress" id="upload-progress" style="display: none;">
+                            <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
+                            <p>Mengunggah file...</p>
+                        </div>
+                        
+                        <div class="media-grid" id="media-gallery">
+                            <!-- Card media diload di sini -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Page: Cookies -->
+                <section id="page-cookies" class="page">
+                    <div class="panel">
+                        <h2><i class="fa-solid fa-cookie"></i> Manajemen Cookies Facebook</h2>
+                        <p class="text-muted mb-4">Paste isi dari file <code>cookies.json</code> hasil ekstensi EditThisCookie di browser Anda ke dalam kolom di bawah ini untuk mengautentikasi sesi Facebook tanpa login (Cegah Verifikasi/Checkpoint).</p>
+                        <form id="form-cookies">
+                            <textarea id="cookies-content" rows="15" placeholder='[ {"domain": ".facebook.com", "name": "c_user", "value": "1000..."} ]'></textarea>
+                            <button type="submit" class="btn-primary mt-4"><i class="fa-solid fa-key"></i> Simpan Session Cookies</button>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Notifikasi</div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
