@@ -87,11 +87,37 @@
                 <!-- Page: Schedule & AI -->
                 <section id="page-schedule" class="page">
                     <div class="panel glass-panel">
-                        <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Pengaturan API Gemini AI</h2>
+                        <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Pengaturan AI & Model</h2>
                         <form id="form-config" class="classic-form">
                             <div class="form-group">
+                                <label for="ai-provider">Penyedia AI</label>
+                                <select id="ai-provider" style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: white; padding: 0.8rem; border-radius: 8px;">
+                                    <option value="gemini">Google Gemini AI</option>
+                                    <option value="openai">OpenRouter / OpenAI-Compatible (Opsi Gratis)</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Gemini Config Box -->
+                            <div id="gemini-config-box" class="form-group mt-2">
                                 <label for="gemini-api">Gemini API Key</label>
-                                <input type="password" id="gemini-api" placeholder="Masukkan API Key untuk auto-generate caption">
+                                <input type="password" id="gemini-api" placeholder="Masukkan API Key Gemini">
+                            </div>
+                            
+                            <!-- OpenAI/OpenRouter Config Box -->
+                            <div id="openai-config-box" style="display:none" class="mt-2">
+                                <div class="form-group mt-2">
+                                    <label>Base URL API</label>
+                                    <input type="text" id="openai-url" placeholder="Contoh: https://openrouter.ai/api/v1">
+                                </div>
+                                <div class="form-group mt-4">
+                                    <label>API Key (OpenRouter/Other)</label>
+                                    <input type="password" id="openai-api" placeholder="Masukkan API Key OpenRouter">
+                                </div>
+                                <div class="form-group mt-4">
+                                    <label>Model ID <span style="color:#10b981">(Gratis)</span></label>
+                                    <input type="text" id="openai-model" placeholder="Model, cth: google/gemini-2.5-flash:free">
+                                </div>
+                                <p class="text-muted mt-4" style="line-height:1.4"><small><i>Tips: Buat akun di <a href="https://openrouter.ai/" target="_blank" style="color:var(--primary)">OpenRouter.ai</a> untuk mendapatkan Key gratis. Pada nama model, Anda bisa menggunakan model gratis seperti <code>google/gemini-2.5-flash:free</code> atau <code>meta-llama/llama-3-8b-instruct:free</code>.</i></small></p>
                             </div>
                             
                             <hr class="separator">

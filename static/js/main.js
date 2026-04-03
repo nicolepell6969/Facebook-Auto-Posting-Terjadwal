@@ -34,7 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchConfig() {
         const res = await fetch('/api/config');
         const data = await res.json();
+        
+        document.getElementById('ai-provider').value = data.ai_provider || 'gemini';
         document.getElementById('gemini-api').value = data.gemini_api_key || '';
+        document.getElementById('openai-url').value = data.openai_base_url || 'https://openrouter.ai/api/v1';
+        document.getElementById('openai-api').value = data.openai_api_key || '';
+        document.getElementById('openai-model').value = data.openai_model || 'google/gemini-2.5-flash:free';
+        
+        document.getElementById('ai-provider').dispatchEvent(new Event('change'));
+        
         currentSchedule = data.schedule || [];
         renderSchedule(currentSchedule);
         updateDashboardStat();
@@ -141,6 +149,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Actions ---
     
+    document.getElementById('ai-provider').addEventListener('change', (e) => {
+        if(e.target.value === 'openai') {
+            document.getElementById('gemini-config-box').style.display = 'none';
+            document.getElementById('openai-config-box').style.display = 'block';
+        } else {
+            document.getElementById('gemini-config-box').style.display = 'block';
+            document.getElementById('openai-config-box').style.display = 'none';
+        }
+    });
+    
     // Add Schedule inline function
     window.removeSchedule = (time) => {
         currentSchedule = currentSchedule.filter(t => t !== time);
@@ -167,11 +185,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('form-config').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const apiKey = document.getElementById('gemini-api').value;
+        
+        const payload = {
+            ai_provider: document.getElementById('ai-provider').value,
+            gemini_api_key: document.getElementById('gemini-api').value,
+            openai_base_url: document.getElementById('openai-url').value,
+            openai_api_key: document.getElementById('openai-api').value,
+            openai_model: document.getElementById('openai-model').value,
+            schedule: currentSchedule
+        };
+        
         const res = await fetch('/api/config', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ gemini_api_key: apiKey, schedule: currentSchedule })
+            body: JSON.stringify(payload)
         });
         if(res.ok) showToast('Pengaturan API & Jadwal Disimpan!');
         updateDashboardStat();

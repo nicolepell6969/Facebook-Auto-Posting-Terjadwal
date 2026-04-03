@@ -138,35 +138,65 @@ def setup_driver():
 
 def generate_ai_caption():
     config = get_config()
-    api_key = config.get("gemini_api_key", "")
-    if not api_key:
-        return None
-        
-    try:
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-2.5-flash')
-        
-        jam = datetime.now().hour
-        
-        if 4 <= jam < 11:
-            suasana = "pagi hari (berikan semangat pagi, ngopi, atau bersiap memulai hari)"
-        elif 11 <= jam < 15:
-            suasana = "siang hari (ingatkan istirahat, makan siang, atau menjaga fokus di tengah hari)"
-        elif 15 <= jam < 18:
-            suasana = "sore hari (sambut waktu pulang kerja, bersantai, atau evaluasi pencapaian hari ini)"
-        else:
-            suasana = "malam hari (ucapan selamat istirahat, renungan malam, atau persiapan tidur)"
-            
-        prompt = f"""Buatkan 1 caption Facebook yang sangat menarik, natural, dan asik tentang motivasi kerja, bisnis, atau keseharian. 
-        Konteks waktu saat ini adalah {suasana}. Wajib sesuaikan kata sapaan pembukanya dengan waktu tersebut!
-        Gunakan bahasa Indonesia gaul tapi sopan. Gunakan emoji secukupnya. Jangan kaku seperti robot. Maksimal 3 kalimat pendek. Jangan berikan hashtag."""
-        
-        response = model.generate_content(prompt)
-        if response.text:
-            return response.text.strip()
-    except Exception as e:
-        log("WARNING", f"Gemini API Error: {str(e).splitlines()[0]}")
+    provider = config.get("ai_provider", "gemini")
     
+    # 1. Deteksi jam saat ini di VPS
+    jam = datetime.now().hour
+    
+    # 2. Tentukan suasana berdasarkan jam
+    if 4 <= jam < 11:
+        suasana = "pagi hari (berikan semangat pagi, ngopi, atau bersiap memulai hari)"
+    elif 11 <= jam < 15:
+        suasana = "siang hari (ingatkan istirahat, makan siang, atau menjaga fokus di tengah hari)"
+    elif 15 <= jam < 18:
+        suasana = "sore hari (sambut waktu pulang kerja, bersantai, atau evaluasi pencapaian hari ini)"
+    else:
+        suasana = "malam hari (ucapan selamat istirahat, renungan malam, atau persiapan tidur)"
+        
+    # 3. Masukkan suasana ke dalam Prompt AI secara dinamis
+    prompt = f"""Buatkan 1 caption Facebook yang sangat menarik, natural, dan asik tentang motivasi kerja, bisnis, atau keseharian. 
+    Konteks waktu saat ini adalah {suasana}. Wajib sesuaikan kata sapaan pembukanya dengan waktu tersebut!
+    Gunakan bahasa Indonesia gaul tapi sopan. Gunakan emoji secukupnya. Jangan kaku seperti robot. Maksimal 3 kalimat pendek. Jangan berikan hashtag."""
+    
+    if provider == "gemini":
+        api_key = config.get("gemini_api_key", "")
+        if not api_key:
+            return None
+        try:
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel('gemini-2.5-flash')
+            response = model.generate_content(prompt)
+            if response.text:
+                return response.text.strip()
+        except Exception as e:
+            log("WARNING", f"Gemini API Error: {str(e).splitlines()[0] if str(e) else 'Unknown'}")
+            
+    elif provider == "openai":
+        base_url = config.get("openai_base_url", "https://openrouter.ai/api/v1")
+        api_key = config.get("openai_api_key", "")
+        model_name = config.get("openai_model", "google/gemini-2.5-flash:free")
+        
+        if not api_key:
+            return None
+        import requests
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": model_name,
+            "messages": [{"role": "user", "content": prompt}]
+        }
+        try:
+            res = requests.post(f"{base_url.rstrip('/')}/chat/completions", json=payload, headers=headers)
+            res_json = res.json()
+            if "choices" in res_json and len(res_json["choices"]) > 0:
+                return res_json["choices"][0]["message"]["content"].strip()
+            else:
+                log("WARNING", f"OpenAI API Error: {res_json}")
+        except Exception as e:
+            log("WARNING", f"OpenAI/OpenRouter Network Error: {str(e)}")
+            
     return None
 
 # ===================== MANAJEMEN KONTEN =====================
