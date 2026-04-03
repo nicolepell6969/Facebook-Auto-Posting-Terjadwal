@@ -1,53 +1,51 @@
-# 🚀 FB Auto Poster Feat AI GEMINI
+# 🚀 FB Auto Poster Feat AI GEMINI (Web UI Edition)
 
-Script otomatisasi (Bot) berbasis Python CLI untuk memposting status dan media (foto/video) ke Facebook secara terjadwal. Sangat cocok dijalankan di VPS (Virtual Private Server) Linux sebagai *Social Media Manager* autopilot Anda yang beroperasi 24/7.
+Bot otomatisasi berbasis Python yang mengotomatiskan posting status teks dan media (foto/video) ke beranda Facebook secara terjadwal. Sangat cocok dijalankan di VPS (Virtual Private Server) Windows/Linux atau komputer pribadi sebagai *Social Media Manager autopilot* yang beroperasi 24/7.
 
-Dilengkapi dengan integrasi **Google Gemini AI** untuk menghasilkan *caption* yang unik, natural, dan menyesuaikan dengan waktu (pagi/siang/sore/malam) secara otomatis untuk menghindari deteksi *spam* Facebook.
-
----
-
-## 🖥️ Tampilan Bot Saat Berjalan
-
-<p align="center">
-  <img src="contoh.png" alt="FB Auto Poster CLI Pro in Action" width="80%">
-</p>
-*Gambar di atas menunjukkan log visual bot yang rapi dan berwarna saat mengeksekusi jadwal posting.*
+Kini, bot beroperasi secara penuh di belakang layar *(background)* dan dikendalikan melalui sebuah **Web Dashboard berdesain Modern Premium**. Aplikasi ini juga dilengkapi integrasi cerdas dari **Google Gemini AI** untuk menghasilkan status yang paling *relate* secara dinamis menyesuaikan suasana dan waktu setempat.
 
 ---
 
+## ✨ Fitur Utama (Pembaruan Versi Web)
+
+- 🌐 **Dashboard UI Premium**: Anda tidak lagi memelototi terminal teks hitam yang membosankan. Kendalikan segala sesuatunya di jendela peramban (*browser*) yang dirancang sangat anggun dengan tema *Dark Mode Window/Glassmorphism*.
+- ⏸️ **Sistem Start/Stop Automation (Scheduler)**: Bot bisa dikendalikan kapanpun untuk jeda (*Pause*) dan mulai kembali (*Resume*) mem-posting berbekal integrasi mulus menggunakan library `APScheduler`. Tinggalkan penjadwalan kuno `time.sleep()`.
+- 🖼️ **Manajemen Multimedia Bawaan**: Mendukung galeri dan fasilitas fitur **Drag & Drop Upload**. Anda dapat menaruh semua aset kampanye (foto & video) melalui panel tanpa melacak folder server. 
+- 🤖 **AI Prompt Awarness & Pengaturan Kustom**: Masukkan API Gemini milik Anda di Dashboard. Jika koneksi API habis (*limit*), bot secara diam-diam akan mengalihkan postingannya menggunakan **Teks Manual (Fallback)** yang juga dapat diedit dari Dashboard.
+- 🍪 **Manajemen Session via Cookies**: Mengubah *Cookies JSON Login Facebook* sangat mudah pakai input tabel. Mode *headless* dengan User-Agent Desktop modern dijamin akan selalu aman dari pemeriksaan Anti-Bot (seperti *Checkpoint/Captcha/Verifikasi 2 Langkah*).
+- 📸 **Auto-Detect Windows/Linux Chrome & Debug Screenshot**: Auto-mendownload ChromeDriver versi paling pas. Bila bot kebingungan menemukan *form update status*, akan ada fitur Tangkap Layar ke error otomatis bernama `debug_error.png` yang siap diperiksa!
 
 ---
 
-## ✨ Fitur Utama
+## 🛠️ Instalasi
 
-- **🧠 AI Caption Generator**: Membuat caption unik secara otomatis menggunakan Gemini AI sesuai dengan waktu sistem (sapaan pagi/siang/sore/malam).
-- **📸 Auto-Media Upload**: Mengambil foto/video secara acak dari folder lokal (`media/`) untuk dipasangkan dengan caption.
-- **🛡️ Anti-Spam History**: Mencatat konten teks manual dan media yang sudah diposting ke dalam `history.json` agar tidak terjadi *double-post*.
-- **☁️ VPS Ready (Headless)**: Dikonfigurasi khusus agar berjalan mulus di *background* VPS Linux tanpa memerlukan tampilan GUI/Desktop (Anti-Crash, `--no-sandbox`).
-- **🔍 Auto-Detect Chrome Version**: Otomatis menyesuaikan versi `undetected-chromedriver` dengan Google Chrome yang terinstal di sistem VPS untuk mencegah error *SessionNotCreatedException*.
-- **🖥️ Pro CLI UI**: Tampilan log terminal yang profesional, rapi, dan menggunakan kode warna ANSI agar mudah dipantau.
-- **📝 Manual Fallback**: Jika API Key AI kosong atau *error*, bot otomatis mengambil teks manual yang sudah Anda siapkan dari file `texts.txt`.
+1. Pastikan Anda sudah mempunyai Python terpasang (disarankan versi 3.10 ke atas) dan Google Chrome *(browser)* standar.
+2. Lakukan clone ke repository ini:
+   ```bash
+   git clone https://github.com/nicolepell6969/Facebook-Auto-Posting-Terjadwal.git
+   cd Facebook-Auto-Posting-Terjadwal
+   ```
+3. Unduh seluruh komponen program tambahan (*requirements/library*):
+   ```bash
+   pip install flask apscheduler werkzeug undetected_chromedriver fake_useragent selenium google-generativeai
+   ```
+
+## 🚀 Cara Penggunaan
+
+Penggunaan bot telah dialihkan sepenuhnya menggunakan peladen Flask:
+
+1. Nyalakan sistem inti peladen dengan perintah:
+   ```bash
+   python app.py
+   ```
+2. Terminal akan memunculkan informasi URL lokal. Apabila berhasil, silakan buka peramban dan meluncur ke tautan di bawah ini:
+   👉 **`http://127.0.0.1:5000/`**
+3. Lakukan pengaturan pertama Anda pada bagian:
+   - **Session Cookies**: Paste kode cookie akun Facebook Anda dari add-on *EditThisCookie* ke tabel Cookies.
+   - **Teks Manual**: Isi beberapa status jika layanan AI Anda ditangguhkan.
+   - **Schedule & AI**: Pasang API Key *Gemini* (Opsional), kemudian atur daftar jam.
+4. Terakhir, klik **[Start Automation]** di pojok kanan atas Dashboard.  Anda juga dapat melakukan uji coba pertunjukan sekejap menekan lambang pelatuk kecil **[Petir (⚡)]** untuk mengeksekusi bot sekarang juga secara *Realtime*.
 
 ---
 
-## ⚙️ Konfigurasi (`main.py`)
-
-Sebelum menjalankan bot, Anda dapat menyesuaikan pengaturan utama di dalam file `main.py`. Berikut adalah blok konfigurasi yang tersedia beserta penjelasan fungsi dari masing-masing variabel:
-
-```python
-# ===================== KONFIGURASI UMUM =====================
-
-COOKIE_FILE  = "cookies.json"  # Cookies akun untuk login (Autentikasi)
-HISTORY_FILE = "history.json"  # Riwayat postingan (Anti-Spam / Anti-Double Post)
-TEXTS_FILE   = "texts.txt"     # Daftar teks/caption manual (Fallback AI) jika tidak menggunakan api AI
-MEDIA_DIR    = "media"         # Folder penyimpanan file foto/video kosongkan jika hanya posting teks saja
-
-SCHEDULE     = ["05:40", "15:00", "21:00"] # Jadwal eksekusi posting (Format 24 Jam) bisa di tambah jika ingin posting tiap beberapa jam
-
-# ===================== KONFIGURASI AI =======================
-
-# Masukkan API Key Gemini Anda di bawah ini
-GEMINI_API_KEY = "API-KEY-GEMINI"
-
-
-
+*Hak Cipta Repository Asli dan Modifikasi Dilindungi.*
